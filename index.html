@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gerador de Certificados Professional</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Playfair+Display:wght@700&display=swap');
+
+@page {
+    size: A4 landscape;
+    margin: 0;
+}
+
+* {
+    box-sizing: border-box;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    background: #0f172a;
+    font-family: 'Montserrat', sans-serif;
+    color: #0d1b2a;
+    min-height: 100vh;
+}
+
+/* PAINEL DE CONTROLE (TOPBAR) */
+.topbar {
+    max-width: 297mm;
+    margin: 20px auto 10px;
+    padding: 16px 24px;
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: center;
+    color: #f8fafc;
+}
+
+.topbar-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    margin-bottom: 4px;
+    border-bottom: 1px solid #334155;
+    padding-bottom: 10px;
+}
+
+.topbar-title {
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 0.5px;
+    color: #38bdf8;
+    text-transform: uppercase;
+}
+
+.control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+    min-width: 160px;
+}
+
+.control-group label {
+    font-size: 11px;
+    font-weight: 500;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.control-group select, 
+.control-group input[type="text"],
+.control-group input[type="file"] {
+    padding: 9px 12px;
+    background: #0f172a;
+    border: 1px solid #475569;
+    border-radius: 6px;
+    color: #f8fafc;
+    font-size: 13px;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.control-group select:focus,
+.control-group input[type="text"]:focus {
+    border-color: #38bdf8;
+    box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #0284c7, #0369a1);
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 38px;
+    align-self: flex-end;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #0369a1, #075985);
+    transform: translateY(-1px);
+}
+
+.dica-bar {
+    width: 100%;
+    font-size: 12px;
+    color: #94a3b8;
+    background: #0f172a;
+    padding: 8px 12px;
+    border-radius: 6px;
+    border-left: 3px solid #38bdf8;
+}
+
+/* LAYOUT DO CERTIFICADO */
+.certificado-container {
+    display: flex;
+    justify-content: center;
+    padding-bottom: 30px;
+}
+
+.certificado {
+    width: 297mm;
+    height: 210mm;
+    position: relative;
+    overflow: hidden;
+    background: #ffffff;
+    color: #0d1b2a;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    box-sizing: border-box;
+    border: 12px solid #0056b3;
+}
+
+.brasao-topo {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 32mm;
+    height: 42mm;
+    background: #0056b3;
+    clip-path: polygon(0 0, 100% 0, 100% 80%, 50% 100%, 0 80%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 8mm;
+    z-index: 10;
+}
+
+.brasao-topo img {
+    max-width: 80%;
+    max-height: 80%;
+    object-fit: contain;
+}
+
+.conteudo {
+    position: absolute;
+    top: 48mm;
+    left: 20mm;
+    right: 20mm;
+    bottom: 12mm;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.curso {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #0d1b2a;
+    text-transform: uppercase;
+    margin-top: 4mm;
+}
+
+.certifica {
+    margin-top: 8mm;
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 4px;
+    color: #0d1b2a;
+    text-transform: uppercase;
+}
+
+.bloco-aluno {
+    width: 75%;
+    margin-top: 6mm;
+    border-bottom: 2px solid #0d1b2a;
+    padding-bottom: 2mm;
+}
+
+.nome-aluno {
+    font-size: 22px;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    color: #1b2a4a;
+    text-transform: uppercase;
+}
+
+.cpf-container {
+    margin-top: 2mm;
+    font-size: 14px;
+    color: #0d1b2a;
+    font-weight: 500;
+}
+
+.texto-declaracao {
+    margin-top: 6mm;
+    max-width: 80%;
+    font-size: 18px;
+    line-height: 1.6;
+    color: #0d1b2a;
+    font-weight: 500;
+}
+
+.bloco-assinatura {
+    margin-top: 17mm;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 50%;
+}
+
+.linha-assinatura {
+    width: 100%;
+    height: 2px;
+    background-color: #0d1b2a;
+    margin-bottom: 3mm;
+}
+
+.assinatura-nome {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: #0d1b2a;
+}
+
+.data-local {
+    margin-top: 3mm;
+    font-size: 12px;
+    color: #0d1b2a;
+    font-weight: 500;
+}
+
+/* LOGOS DO RODAPÉ (IGUALADOS E COM RESPIRO) */
+.logo-rodape-esquerda {
+    position: absolute;
+    bottom: 9mm;
+    left: 12mm;
+    width: 45mm;
+    height: 18mm;
+    max-width: 45mm;
+    max-height: 18mm;
+    object-fit: contain;
+    object-position: bottom left;
+}
+
+.logo-rodape-direita {
+    position: absolute;
+    bottom: 9mm;
+    right: 12mm;
+    width: 45mm;
+    height: 18mm;
+    max-width: 45mm;
+    max-height: 18mm;
+    object-fit: contain;
+    object-position: bottom right;
+}
+
+/* RODAPÉ TÉCNICO (CANTO INFERIOR DIREITO) */
+.rodape-tecnico {
+    position: absolute;
+    bottom: 3mm;
+    right: 12mm;
+    font-family: monospace;
+    font-size: 7.5pt;
+    color: #64748b;
+    text-align: right;
+    letter-spacing: 0.3px;
+    z-index: 5;
+}
+
+/* EDIÇÃO DIRETA NO CERTIFICADO */
+[contenteditable="true"] {
+    outline: none;
+    border-radius: 3px;
+    transition: background 0.2s ease;
+}
+
+[contenteditable="true"]:hover {
+    background: rgba(2, 132, 199, 0.1);
+}
+
+[contenteditable="true"]:focus {
+    background: rgba(2, 132, 199, 0.2);
+}
+
+/* IMPRESSÃO / GERAR PDF */
+@media print {
+    .topbar { display: none !important; }
+    body { background: #fff !important; }
+    .certificado-container { padding: 0; }
+    .certificado { 
+        box-shadow: none; 
+        margin: 0;
+        page-break-after: always;
+    }
+    [contenteditable="true"]:hover,
+    [contenteditable="true"]:focus {
+        background: transparent !important;
+        box-shadow: none !important;
+    }
+}
+
+/* ============================================================
+   OPÇÕES DE FUNDO ALTERNATIVAS (OPCIONAL)
+   Para usar, descomente um dos blocos abaixo e comente o fundo atual.
+   ============================================================ */
+
+/* OPÇÃO 1: Fundo com Imagem Local (Canva / Designer) */
+/*
+.certificado {
+    background-image: url('src/img/fundo-certificado.png') !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+}
+*/
+
+/* OPÇÃO 2: Fundo Off-White / Cream Suave */
+/*
+.certificado {
+    background: #f8fafc !important;
+}
+*/
+
+/* OPÇÃO 3: Gradiente Suave */
+/*
+.certificado {
+    background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%) !important;
+}
+*/
+
+</style>
+</head>
+
+<body>
+
+<!-- PAINEL DE CONTROLE -->
+<div class="topbar">
+    <div class="topbar-header">
+        <div class="topbar-title">⚡ Central Komando | Emissor de Certificados</div>
+    </div>
+
+    <div class="control-group">
+        <label for="selEmpresa">Logo Flâmula Topo (Empresa / GR)</label>
+        <select id="selEmpresa" onchange="atualizarEmpresa()"></select>
+    </div>
+
+    <div class="control-group">
+        <label for="selCliente">Logo Direita (Cliente / Operação)</label>
+        <select id="selCliente" onchange="atualizarCliente()"></select>
+    </div>
+
+    <div class="control-group">
+        <label for="selCurso">Módulo / Treinamento</label>
+        <select id="selCurso" onchange="atualizarCurso()"></select>
+    </div>
+
+    <div class="control-group">
+        <label for="inputCidade">Cidade / Polo</label>
+        <input type="text" id="inputCidade" list="listaCidades" value="Guarulhos" oninput="atualizarCidade()" placeholder="Digite ou selecione...">
+        <datalist id="listaCidades"></datalist>
+    </div>
+
+    <div class="control-group">
+        <label for="inputLogoDireita">Upload Logo Dir. (Temp)</label>
+        <input type="file" id="inputLogoDireita" accept="image/*" onchange="carregarLogoUpload(event, 'logoDireita')">
+    </div>
+
+    <button class="btn-primary" onclick="window.print()">
+        <span>🖨️</span> Imprimir / Salvar PDF
+    </button>
+
+    <div class="dica-bar">
+        💡 <strong>Modo Edição Direta:</strong> Clique no Nome, CPF, Cidade ou Data no certificado para alterar o texto livremente.
+    </div>
+</div>
+
+<!-- CERTIFICADO -->
+<div class="certificado-container">
+    <div class="certificado">
+
+        <div class="brasao-topo">
+            <img id="logoTopo" src="" alt="Logo Empresa Topo" onerror="this.style.display='none'">
+        </div>
+
+        <div class="conteudo">
+            <div class="curso" id="curso">TREINAMENTO DE MOTORISTA</div>
+            <div class="certifica">CERTIFICAMOS QUE</div>
+
+            <div class="bloco-aluno">
+                <div class="nome-aluno" id="motorista" contenteditable="true" spellcheck="false">MODELO</div>
+            </div>
+
+            <div class="cpf-container">
+                CPF: <span id="cpf" contenteditable="true" spellcheck="false" oninput="aplicarMascaraCPF(this)">XXX.XXX.XX-XX</span>
+            </div>
+
+            <div class="texto-declaracao" id="texto" contenteditable="true"></div>
+
+            <div class="bloco-assinatura">
+                <div class="linha-assinatura"></div>
+                <div class="assinatura-nome" id="supervisor" contenteditable="true">Jucie Marcos</div>
+                <div class="data-local">
+                    <span id="cidade" contenteditable="true">Guarulhos</span>, <span id="data" contenteditable="true"></span>
+                </div>
+                
+            </div>
+
+        </div>
+
+        <!-- Logos de Rodapé -->
+        <img class="logo-rodape-esquerda" src="src/logo/komando.jpg" alt="Komando GR" onerror="this.style.display='none'">
+        <img id="logoDireita" class="logo-rodape-direita" src="" alt="Logo Cliente" onerror="this.style.display='none'">
+
+        <!-- NOVO: Rodapé Técnico (Lado Direito) -->
+        <div class="rodape-tecnico">
+            Desenvolvido por Komando GR | <span id="codigo-validacao">REF: KMD-2026-OK</span> | <span id="data-emissao"></span>
+        </div>
+
+    </div>
+</div>
+</div>
+
+<!-- BASES DE DADOS JSON LOCAL EMBUTIDAS -->
+<script type="application/json" id="dados-empresas">
+{
+  "Komando GR": {
+    "logo": "src/logo/kmd.png"
+  },
+  "Komando GR (JPG)": {
+    "logo": "src/logo/komando.jpg"
+  }
+}
+</script>
+
+<script type="application/json" id="dados-clientes">
+{
+  "Sabugi Logística": {
+    "logo": "src/logo/sabugi.png",
+    "texto": "concluiu a reciclagem requerida por Sabugi Logística e Komando Gerenciamento de Riscos",
+    "responsavel": "Jucie Marcos"
+  },
+  "Supersonic Logística": {
+    "logo": "src/logo/Logo-Supersonic.png",
+    "texto": "concluiu a reciclagem requerida por Supersonic Logística e Transportes Ltda e Komando Gerenciamento de Riscos",
+    "responsavel": "Ana Claudia Souza"
+  },
+    "Jojo Transportes Logísticos": {
+        "logo": "",
+        "texto": "concluiu a reciclagem requerida por Jojo Transportes Logísticos e Komando Gerenciamento de Riscos",
+        "responsavel": "Daysi Nascimento"
+    },
+    "CM2 Transportes": {
+        "logo": "src/logo/cm2.png",
+        "texto": "concluiu a reciclagem requerida por CM2 Transportes e Komando Gerenciamento de Riscos",
+        "responsavel": "Daysi Nascimento"
+    },
+  "Cliente Exemplo": {
+        "logo": "",
+    "texto": "concluiu a reciclagem requerida por Cliente Exemplo",
+    "responsavel": "Nome do Responsável"
+  }
+}
+</script>
+
+<script type="application/json" id="dados-cursos">
+{
+  "Treinamento de Motorista": "TREINAMENTO DE MOTORISTA",
+  "Reciclagem de Motorista": "RECICLAGEM DE MOTORISTA",
+  "Direção Defensiva & GR": "DIREÇÃO DEFENSIVA & GERENCIAMENTO DE RISCO"
+}
+</script>
+
+<script type="application/json" id="dados-cidades">
+[
+  "Guarulhos",
+  "São Paulo",
+  "Campinas",
+  "Santos",
+  "São José dos Campos",
+  "Sorocaba",
+  "Ribeirão Preto",
+  "Rio de Janeiro",
+  "Belo Horizonte",
+  "Curitiba",
+  "Porto Alegre",
+  "Salvador"
+]
+</script>
+
+<script>
+let EMPRESAS = {};
+let CLIENTES = {};
+let CURSOS = {};
+let CIDADES = [];
+const ESTADOS_POR_CIDADE = {
+    "Guarulhos": "SP",
+    "São Paulo": "SP",
+    "Campinas": "SP",
+    "Santos": "SP",
+    "São José dos Campos": "SP",
+    "Sorocaba": "SP",
+    "Ribeirão Preto": "SP",
+    "Rio de Janeiro": "RJ",
+    "Belo Horizonte": "MG",
+    "Curitiba": "PR",
+    "Porto Alegre": "RS",
+    "Salvador": "BA"
+};
+
+async function carregarDados() {
+    EMPRESAS = JSON.parse(document.getElementById("dados-empresas").textContent);
+    CLIENTES = JSON.parse(document.getElementById("dados-clientes").textContent);
+    CURSOS = JSON.parse(document.getElementById("dados-cursos").textContent);
+    CIDADES = JSON.parse(document.getElementById("dados-cidades").textContent);
+
+    try {
+        const resposta = await fetch("clientes.json", { cache: "no-store" });
+        if (!resposta.ok) throw new Error(`Falha ao carregar clientes.json: ${resposta.status}`);
+        CLIENTES = await resposta.json();
+    } catch (erro) {
+        console.warn("Usando clientes embutidos; clientes.json não pôde ser carregado.", erro);
+    }
+
+    popularSelect("selEmpresa", EMPRESAS);
+    popularSelect("selCliente", CLIENTES);
+    popularSelect("selCurso", CURSOS);
+    popularDatalist("listaCidades", CIDADES);
+
+    atualizarEmpresa();
+    atualizarCliente();
+    atualizarCurso();
+    atualizarCidade();
+    preencherDataAutomatica();
+    gerarCodigoValidacao();
+}
+
+function popularSelect(id, opcoes) {
+    const select = document.getElementById(id);
+    select.innerHTML = "";
+    Object.keys(opcoes).forEach(chave => {
+        const opt = document.createElement("option");
+        opt.value = chave;
+        opt.textContent = chave;
+        select.appendChild(opt);
+    });
+}
+
+function popularDatalist(id, lista) {
+    const datalist = document.getElementById(id);
+    datalist.innerHTML = "";
+    lista.forEach(item => {
+        const opt = document.createElement("option");
+        opt.value = item;
+        datalist.appendChild(opt);
+    });
+}
+
+function atualizarCidade() {
+    const valor = document.getElementById("inputCidade").value.trim();
+    const cidadeSemEstado = valor.split("/")[0].trim();
+    const estado = ESTADOS_POR_CIDADE[cidadeSemEstado];
+    const cidadeFormatada = estado ? `${cidadeSemEstado} / ${estado}` : cidadeSemEstado;
+
+    document.getElementById("cidade").textContent = cidadeFormatada || "Guarulhos / SP";
+}
+
+function preencherDataAutomatica() {
+    const hoje = new Date();
+    const mesExtenso = hoje.toLocaleDateString('pt-BR', { month: 'long' });
+    const mesCapitalizado = mesExtenso.charAt(0).toUpperCase() + mesExtenso.slice(1);
+    const ano = hoje.getFullYear();
+    
+    document.getElementById("data").textContent = `${mesCapitalizado} de ${ano}`;
+}
+
+function atualizarEmpresa() {
+    const chave = document.getElementById("selEmpresa").value;
+    const empresa = EMPRESAS[chave];
+    const imgLogo = document.getElementById("logoTopo");
+    imgLogo.style.display = "block";
+    imgLogo.src = empresa.logo;
+}
+
+function atualizarCliente() {
+    const chave = document.getElementById("selCliente").value;
+    const cliente = CLIENTES[chave];
+    if (!cliente) return;
+
+    const imgLogo = document.getElementById("logoDireita");
+    imgLogo.style.display = cliente.logo ? "block" : "none";
+    imgLogo.src = cliente.logo || "";
+    
+    document.getElementById("texto").textContent = cliente.texto;
+    document.getElementById("supervisor").textContent = cliente.responsavel;
+}
+
+function atualizarCurso() {
+    const chave = document.getElementById("selCurso").value;
+    document.getElementById("curso").textContent = CURSOS[chave];
+}
+
+function gerarCodigoValidacao() {
+    const hoje = new Date();
+    const dataFormatada = hoje.toLocaleDateString('pt-BR'); // Ex: 11/09/2026
+    const hash = Math.random().toString(36).substring(2, 8).toUpperCase();
+    
+    // Atualiza o código de validação e a data de emissão
+    document.getElementById("codigo-validacao").textContent = `REF: KMD-${hoje.getFullYear()}-${hash}`;
+    document.getElementById("data-emissao").textContent = `Emitido em: ${dataFormatada}`;
+}
+
+function carregarLogoUpload(event, targetId) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const imgLogo = document.getElementById(targetId);
+            imgLogo.style.display = "block";
+            imgLogo.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+}
+
+function tratarErroLogo(img) {
+    img.style.display = "none";
+}
+
+function aplicarMascaraCPF(element) {
+    let valor = element.innerText.replace(/\D/g, "");
+    if (valor.length > 11) valor = valor.slice(0, 11);
+    
+    valor = valor.replace(/(\d{3})(\d)/, "$1.$2");
+    valor = valor.replace(/(\d{3})(\d)/, "$1.$2");
+    valor = valor.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+    
+    if (element.innerText !== valor && valor.length > 0) {
+        element.innerText = valor;
+        const range = document.createRange();
+        const sel = window.getSelection();
+        range.selectNodeContents(element);
+        range.collapse(false);
+        sel.removeAllRanges();
+        sel.addRange(range);
+    }
+}
+
+carregarDados();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,27 @@
+{
+  "Sabugi Logística": {
+    "logo": "src/logo/sabugi.png",
+    "texto": "concluiu a reciclagem requerida por Sabugi Logística e Komando Gerenciamento de Riscos",
+    "responsavel": "Jucie Marcos"
+  },
+  "Supersonic Logística": {
+    "logo": "src/logo/Logo-Supersonic.png",
+    "texto": "concluiu a reciclagem requerida por Supersonic Logística e Transportes Ltda e Komando Gerenciamento de Riscos",
+    "responsavel": "Ana Claudia Souza"
+  },
+  "Jojo Transportes Logísticos": {
+    "logo": "",
+    "texto": "concluiu a reciclagem requerida por Jojo Transportes Logísticos e Komando Gerenciamento de Riscos",
+    "responsavel": "Daysi Nascimento"
+  },
+  "CM2 Transportes": {
+    "logo": "src/logo/cm2.png",
+    "texto": "concluiu a reciclagem requerida por CM2 Transportes e Komando Gerenciamento de Riscos",
+    "responsavel": "Daysi Nascimento"
+  },
+  "Cliente Exemplo": {
+    "logo": "",
+    "texto": "concluiu a reciclagem requerida por Cliente Exemplo",
+    "responsavel": "Nome do Responsável"
+  }
+}
